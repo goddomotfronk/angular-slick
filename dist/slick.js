@@ -1,7 +1,7 @@
 'use strict';
 angular.module('slick', []).directive('slick', [
-  '$timeout',
-  function ($timeout) {
+  '$timeout', '$rootScope',
+  function ($timeout, $rootScope) {
     return {
       restrict: 'AEC',
       scope: {
@@ -139,16 +139,15 @@ angular.module('slick', []).directive('slick', [
         if (scope.initOnload) {
           isInitialized = false;
           return scope.$watch('data', function (newVal, oldVal) {
-            if (newVal != null) {
-              if (isInitialized) {
-                destroySlick();
-              }
-              initializeSlick();
-              return isInitialized = true;
+            if (newVal != null && !isInitialized) {
+                initializeSlick();
+                return isInitialized = true;
             }
           });
         } else {
-          return initializeSlick();
+          $rootScope.$on('repeatFinished', function () {
+            initializeSlick();
+          }
         }
       }
     };
