@@ -147,7 +147,7 @@ angular.module('slick', []).directive('slick', [
         } else {
           $rootScope.$on('repeatFinished', function () {
             initializeSlick();
-          }
+            });
         }
       }
     };
